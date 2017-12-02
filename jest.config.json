@@ -1,0 +1,9 @@
+{
+    "moduleFileExtensions": [
+        "js",
+        "jsx"
+    ],
+    "moduleNameMapper": {
+    	"\\.(css|less)$": "identity-obj-proxy"
+    }
+}

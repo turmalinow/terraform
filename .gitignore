@@ -1,0 +1,10 @@
+# NodeJS modules folder
+node_modules
+
+# npm debug log
+npm-debug.log
+
+.firebaserc
+src/firebase.js
+
+dist/bundle.js
