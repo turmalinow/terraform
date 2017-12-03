@@ -83,20 +83,29 @@ export function fetchGames(snapshot) {
 export function subscribeForGamesList(user) {
   console.debug("subscribeForGamesList actionCreator");
   return (dispatch) => {
-    console.debug("dispatching fetchGamesStarted");
+    console.debug("dispatching fetchGamesStarted for " + user.email);
     dispatch(fetchGamesStarted());
-    const unsubscribeFromGamesList = firebase.firestore().collection('games').onSnapshot((snapshot) => {
-      console.debug("firestore snapshot just arrived");
-      dispatch(fetchGames(snapshot));
-      console.debug("dispatching fetchGamesFinished");
-      dispatch(fetchGamesFinished());
-    });
+    const unsubscribeFromGamesList = firebase.firestore().collection('games')
+      .where('players.' + user.uid, '>', 0)
+      .orderBy('players.' + user.uid, 'desc')
+      .onSnapshot((snapshot) => {
+        console.debug("firestore snapshot just arrived");
+        dispatch(fetchGames(snapshot));
+        console.debug("dispatching fetchGamesFinished");
+        dispatch(fetchGamesFinished());
+      });
     dispatch(unsubscribe(UNSUBSCRIBE_FROM_GAMES_LIST, unsubscribeFromGamesList));
   };
 }
 
 export function createGame(data) {
+  const user = firebase.auth().currentUser;
   return dispatch => {
+    data.players = {
+      [user.uid]: Date.now()
+    };
+    data.owner = user.uid;
+    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
     firebase.firestore().collection("games").add(data)
       .then(docRef => {
         console.log("Document written with ID: ", docRef.id);
