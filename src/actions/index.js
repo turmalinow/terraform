@@ -127,3 +127,19 @@ export function deleteGame(id) {
       });
   };
 }
+
+export function joinGame(id) {
+  const user = firebase.auth().currentUser;
+  console.debug("joinGame actionCreator for user " + user.email);
+  return dispatch => {
+    firebase.firestore().collection("games").doc(id).update({
+      ["players." + user.uid]: Date.now()
+    })
+    .then(function() {
+      console.debug("Document successfully updated!");
+    })
+    .catch(function(error) {
+      console.error("Error updating document: ", error);
+    });
+  };
+}
