@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { authorize, signIn, signOut } from '../actions';
 
 import LoginRequired from './login_required';
+import GameJoin from './game_join';
 import GameForm from './game_form';
 import GamesList from './games_list';
 
@@ -30,6 +31,7 @@ class App extends Component {
           {this.props.user ? this.renderSignedIn() : this.renderAnonym()}
         </p>
         <LoginRequired>
+          <GameJoin />
           <GameForm />
           <GamesList />
         </LoginRequired>

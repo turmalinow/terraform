@@ -130,11 +130,14 @@ export function deleteGame(id) {
 
 export function joinGame(id) {
   const user = firebase.auth().currentUser;
-  console.debug("joinGame actionCreator for user " + user.email);
+  console.debug("joinGame actionCreator for user " + user.email + " and game " + id);
+  const data = {
+    ["players." + user.uid]: Date.now()
+  };
+  console.debug("data to update game with");
+  console.dir(data);
   return dispatch => {
-    firebase.firestore().collection("games").doc(id).update({
-      ["players." + user.uid]: Date.now()
-    })
+    firebase.firestore().collection("games").doc(id).update(data)
     .then(function() {
       console.debug("Document successfully updated!");
     })

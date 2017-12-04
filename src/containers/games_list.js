@@ -26,7 +26,13 @@ class GamesList extends Component {
           {this.props.games.data.map(game => (
             <li key={game._id}>
               {game.title}
-              <button onClick={() => this.props.deleteGame(game._id)}>delete</button>
+              <input size="21"
+                     readOnly={true}
+                     value={game._id} />
+              <button
+                onClick={() => this.props.deleteGame(game._id)}>
+                delete
+              </button>
             </li>
           ))}
         </ul>
